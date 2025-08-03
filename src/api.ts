@@ -23,11 +23,10 @@ export const todoApi = {
 
   getTodoById: async (id: number) => await apiClient.get<Todo>(`/todos/${id}`),
 
-  getTodos: async (status?: TodoStatus) => {
-    const params = status ? { filter: status } : {};
-
-    return await apiClient.get<MetaResponse<Todo, TodoInfo>>('/todos', {
-      params,
-    });
-  },
+  getTodos: async (status: TodoStatus = 'all') =>
+    await apiClient.get<MetaResponse<Todo, TodoInfo>>('/todos', {
+      params: {
+        filter: status,
+      },
+    }),
 };

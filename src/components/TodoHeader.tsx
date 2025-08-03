@@ -2,22 +2,21 @@ import { useState, type ChangeEvent, type FC } from 'react';
 import type { TodoRequest } from '../types';
 
 interface TodoHeaderProps {
-  onAddTask: (params: TodoRequest) => void;
+  onAddTodo: (params: TodoRequest) => void;
 }
 
-export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTask }) => {
+export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
   const [title, setTitle] = useState<string>('');
+  const normalizedTitle = title.trim();
 
   const handleChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleAddTask = () => {
-    const normalizedTitle = title.trim();
-
+  const handleAddTodo = () => {
     if (!normalizedTitle) return;
 
-    onAddTask({ title });
+    onAddTodo({ title });
 
     setTitle('');
   };
@@ -30,7 +29,9 @@ export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTask }) => {
         value={title}
         onChange={handleChangeTitle}
       />
-      <button onClick={handleAddTask}>Add</button>
+      <button disabled={!normalizedTitle} onClick={handleAddTodo}>
+        Add
+      </button>
     </>
   );
 };

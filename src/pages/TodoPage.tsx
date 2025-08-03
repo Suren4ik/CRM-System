@@ -1,12 +1,14 @@
-import { TodoHeader } from '../components/index';
+import { TodoHeader, TodoList, TodoListFilter } from '../components/index';
 
 import { useTodoService } from '../hooks/useTodoService';
 
 export const TodoPage = () => {
-  const { handleAddTask } = useTodoService();
+  const { addTodo, changeFilter, todos, todoInfo } = useTodoService();
   return (
     <>
-      <TodoHeader onAddTask={handleAddTask} />
+      <TodoHeader onAddTodo={addTodo} />
+      <TodoListFilter info={todoInfo} onChange={changeFilter} />
+      <TodoList todos={todos} />
     </>
   );
 };
