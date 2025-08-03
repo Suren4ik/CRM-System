@@ -21,6 +21,7 @@ export default tseslint.config([
     },
     rules: {
       'prettier/prettier': 'error',
+      'react/react-in-jsx-scope': 'off',
     },
     languageOptions: {
       ecmaVersion: 2020,
