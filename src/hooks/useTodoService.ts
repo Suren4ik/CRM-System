@@ -14,13 +14,6 @@ export const useTodoService = () => {
     getTodos();
   }, [filter]);
 
-  useEffect(() => {
-    if (todoInfo) {
-      console.log('todo info effect');
-      updateTodoInfo();
-    }
-  }, [todos]);
-
   const changeFilter = (status: TodoStatus) => {
     setFilter(status);
   };
@@ -32,7 +25,10 @@ export const useTodoService = () => {
       const response = await todoApi.getTodos(filter);
 
       setTodos(response.data.data);
-      setTodoInfo(response.data.info ?? null);
+
+      if (response.data.info) {
+        setTodoInfo(response.data.info);
+      }
     } finally {
       setLoadnig(false);
     }
@@ -47,6 +43,8 @@ export const useTodoService = () => {
       if (response?.data) {
         setTodos(prev => [...prev, response.data]);
       }
+
+      await getTodos();
     } finally {
       setLoadnig(false);
     }
@@ -59,28 +57,26 @@ export const useTodoService = () => {
       setTodos(prev =>
         prev.map(todo => (todo.id === id ? response.data : todo))
       );
+
+      /*
+       * Решил что правильнее будет запрашивать актуальные данные,
+       * т. к. данные на сервере могут измениться, если с апи работает еще кто-то.
+       * Вариант с кешированием решил пока не делать, так как объём данных небольшой
+       */
+      await getTodos();
     } catch (error) {
       console.log('Error:', error);
     }
   };
 
-  const updateTodoInfo = () => {
-    const info = todos.reduce(
-      (acc, todo) => {
-        acc.all += 1;
+  const deleteTodo = async (id: number) => {
+    const response = await todoApi.deleteTodo(id);
 
-        if (todo.isDone) {
-          acc.completed += 1;
-        } else {
-          acc.inWork += 1;
-        }
+    if (response.data.id === id) {
+      setTodos(prev => prev.filter(todo => todo.id !== id));
+    }
 
-        return acc;
-      },
-      { all: 0, completed: 0, inWork: 0 }
-    );
-
-    setTodoInfo(info);
+    await getTodos();
   };
 
   return {
@@ -93,5 +89,6 @@ export const useTodoService = () => {
     addTodo,
     updateTodo,
     changeFilter,
+    deleteTodo,
   };
 };
