@@ -1,5 +1,5 @@
 import './App.scss';
-import { TodoPage } from './pages/TodoPage';
+import { TodoPage } from './pages/index';
 
 function App() {
   return (
