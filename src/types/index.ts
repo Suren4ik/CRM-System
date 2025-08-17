@@ -1,5 +1,1 @@
-export type {
-    TodoRequest,
-    Todo,
-    TodoInfo
-} from './Task';
+export type { Todo, TodoInfo, TodoRequest, TodoStatus } from './Task';

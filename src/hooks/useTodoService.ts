@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { todoApi } from '../api';
-import type { Todo, TodoRequest } from '../types';
-import type { TodoInfo, TodoStatus } from '../types/Task';
+import type { Todo, TodoInfo, TodoRequest, TodoStatus } from '../types';
 
 export const useTodoService = () => {
   const [todos, setTodos] = useState<Todo[]>([]);

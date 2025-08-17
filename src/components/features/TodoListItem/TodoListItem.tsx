@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState, type FC } from 'react';
 import type { Todo, TodoRequest } from '../../../types';
-import { Icon } from '../../ui/index';
+import { Icon } from '../../ui';
 import './TodoListItem.scss';
 
 interface TodoListItemProps {

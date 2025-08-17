@@ -1,10 +1,6 @@
-import {
-  TodoHeader,
-  TodoList,
-  TodoListFilter,
-} from '../components/features/index';
+import { TodoHeader, TodoList, TodoListFilter } from '../components/features';
 
-import { useTodoService } from '../hooks//index';
+import { useTodoService } from '../hooks';
 
 export const TodoPage = () => {
   const {

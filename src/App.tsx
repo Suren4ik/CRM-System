@@ -1,13 +1,12 @@
+import { Route, Routes } from 'react-router-dom';
 import './App.scss';
-import { TodoPage } from './pages/index';
+import { TodoPage } from './pages';
 
 function App() {
   return (
-    <>
-      <div>
-        <TodoPage />
-      </div>
-    </>
+    <Routes>
+      <Route path="/" element={<TodoPage />} />
+    </Routes>
   );
 }
 
