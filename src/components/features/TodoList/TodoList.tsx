@@ -1,6 +1,7 @@
 import type { FC } from 'react';
-import type { Todo, TodoRequest } from '../types';
-import { TodoListItem } from './TodoListItem';
+import type { Todo, TodoRequest } from '../../../types';
+import { TodoListItem } from '../TodoListItem/TodoListItem';
+import './TodoList.scss';
 
 interface TodoListProps {
   todos: Todo[];
@@ -9,7 +10,7 @@ interface TodoListProps {
 }
 
 export const TodoList: FC<TodoListProps> = ({ todos, onUpdate, onDelete }) => (
-  <div>
+  <div className="todo-list">
     {todos.map(todo => (
       <TodoListItem
         key={todo.id}

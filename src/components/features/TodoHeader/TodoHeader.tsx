@@ -1,5 +1,7 @@
 import { useState, type ChangeEvent, type FC } from 'react';
-import type { TodoRequest } from '../types';
+import type { TodoRequest } from '../../../types';
+
+import './TodoHeader.scss';
 
 interface TodoHeaderProps {
   onAddTodo: (params: TodoRequest) => void;
@@ -22,7 +24,7 @@ export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
   };
 
   return (
-    <>
+    <div className="todo-header">
       <input
         type="text"
         placeholder="Task to be done"
@@ -32,6 +34,6 @@ export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
       <button disabled={!normalizedTitle} onClick={handleAddTodo}>
         Add
       </button>
-    </>
+    </div>
   );
 };

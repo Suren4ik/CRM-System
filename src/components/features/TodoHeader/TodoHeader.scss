@@ -1,0 +1,24 @@
+.todo-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 18px;
+
+  & > input {
+    flex: 1;
+    padding: 10px 15px;
+  }
+
+  & > button {
+    padding: 9px 25px;
+    background: #1b78fd;
+    color: white;
+    border: none;
+    border-radius: 12px;
+
+    &:hover {
+      transform: scale(1.02);
+      transition: ease;
+    }
+  }
+}

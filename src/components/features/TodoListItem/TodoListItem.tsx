@@ -1,6 +1,7 @@
-import { useState, type FC } from 'react';
-import type { Todo, TodoRequest } from '../types';
-import { Icon } from './ui/Icon';
+import { useEffect, useRef, useState, type FC } from 'react';
+import type { Todo, TodoRequest } from '../../../types';
+import { Icon } from '../../ui/index';
+import './TodoListItem.scss';
 
 interface TodoListItemProps {
   todo: Todo;
@@ -15,6 +16,15 @@ export const TodoListItem: FC<TodoListItemProps> = ({
 }) => {
   const [title, setTitle] = useState<string>(todo.title);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    console.log(inputRef.current);
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   const handleUpdate = (data: TodoRequest) => {
     onUpdate(todo.id, data);
@@ -38,17 +48,24 @@ export const TodoListItem: FC<TodoListItemProps> = ({
   };
 
   return (
-    <div>
-      <label>
-        <input
-          type="checkbox"
-          checked={todo.isDone}
-          onChange={() => handleUpdate({ isDone: !todo.isDone })}
-        />
-      </label>
+    <div className="todo-list-item">
+      <input
+        type="checkbox"
+        checked={todo.isDone}
+        onChange={() => handleUpdate({ isDone: !todo.isDone })}
+      />
       {isEditing ? (
         <>
-          <input value={title} onChange={e => setTitle(e.target.value)} />
+          <input
+            ref={inputRef}
+            className="todo-list-item__title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') handleSave();
+              if (e.key === 'Escape') handleCancel();
+            }}
+          />
           <button onClick={handleCancel}>
             <Icon variant="cancel" />
           </button>
@@ -58,7 +75,16 @@ export const TodoListItem: FC<TodoListItemProps> = ({
         </>
       ) : (
         <>
-          <span>{todo.title}</span>
+          <span
+            onDoubleClick={() => setIsEditing(true)}
+            className={
+              todo.isDone
+                ? 'todo-list-item__title--done'
+                : 'todo-list-item__title'
+            }
+          >
+            {todo.title}
+          </span>
           <button onClick={() => setIsEditing(true)}>
             <Icon variant="edit" />
           </button>

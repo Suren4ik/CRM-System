@@ -1,14 +1,31 @@
-import { TodoHeader, TodoList, TodoListFilter } from '../components/index';
+import {
+  TodoHeader,
+  TodoList,
+  TodoListFilter,
+} from '../components/features/index';
 
-import { useTodoService } from '../hooks/useTodoService';
+import { useTodoService } from '../hooks//index';
 
 export const TodoPage = () => {
-  const { addTodo, changeFilter, updateTodo, deleteTodo, todos, todoInfo } =
-    useTodoService();
+  const {
+    addTodo,
+    changeFilter,
+    updateTodo,
+    deleteTodo,
+    todos,
+    todoInfo,
+    filter,
+  } = useTodoService();
   return (
     <>
       <TodoHeader onAddTodo={addTodo} />
-      {todoInfo && <TodoListFilter info={todoInfo} onChange={changeFilter} />}
+      {todoInfo && (
+        <TodoListFilter
+          info={todoInfo}
+          status={filter}
+          onChange={changeFilter}
+        />
+      )}
       <TodoList todos={todos} onUpdate={updateTodo} onDelete={deleteTodo} />
     </>
   );
