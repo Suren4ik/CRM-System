@@ -7,10 +7,9 @@ export const useTodoService = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoInfo, setTodoInfo] = useState<TodoInfo | null>(null);
   const [filter, setFilter] = useState<TodoStatus>('all');
-  const [loading, setLoadnig] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('filter effect');
     getTodos();
   }, [filter]);
 
@@ -20,7 +19,7 @@ export const useTodoService = () => {
 
   const getTodos = async () => {
     try {
-      setLoadnig(true);
+      setLoading(true);
 
       const response = await todoApi.getTodos(filter);
 
@@ -30,13 +29,13 @@ export const useTodoService = () => {
         setTodoInfo(response.data.info);
       }
     } finally {
-      setLoadnig(false);
+      setLoading(false);
     }
   };
 
   const addTodo = async (data: TodoRequest) => {
     try {
-      setLoadnig(true);
+      setLoading(true);
 
       const response = await todoApi.createTodo(data);
 
@@ -46,7 +45,7 @@ export const useTodoService = () => {
 
       await getTodos();
     } finally {
-      setLoadnig(false);
+      setLoading(false);
     }
   };
 

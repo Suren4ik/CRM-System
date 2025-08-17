@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FC } from 'react';
 import type { TodoRequest } from '../../../types';
 
+import { validate } from '../../../utils';
 import './TodoHeader.scss';
 
 interface TodoHeaderProps {
@@ -9,14 +10,21 @@ interface TodoHeaderProps {
 
 export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
   const [title, setTitle] = useState<string>('');
-  const normalizedTitle = title.trim();
+  const [error, setError] = useState<string | null>();
 
   const handleChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+
+    if (error) setError(null);
   };
 
   const handleAddTodo = () => {
-    if (!normalizedTitle) return;
+    const validationError = validate(title);
+
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
     onAddTodo({ title });
 
@@ -25,15 +33,18 @@ export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
 
   return (
     <div className="todo-header">
-      <input
-        type="text"
-        placeholder="Task to be done"
-        value={title}
-        onChange={handleChangeTitle}
-      />
-      <button disabled={!normalizedTitle} onClick={handleAddTodo}>
-        Add
-      </button>
+      <div className="todo-header__row">
+        <input
+          type="text"
+          placeholder="Task to be done"
+          value={title}
+          onChange={handleChangeTitle}
+        />
+        <button disabled={!!error} onClick={handleAddTodo}>
+          Add
+        </button>
+      </div>
+      {error && <div className={'todo-header__error'}>{error}</div>}
     </div>
   );
 };

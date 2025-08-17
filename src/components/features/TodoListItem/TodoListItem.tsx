@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FC } from 'react';
+import { memo, useEffect, useRef, useState, type FC } from 'react';
 import type { Todo, TodoRequest } from '../../../types';
 import { Icon } from '../../ui/index';
 import './TodoListItem.scss';
@@ -9,90 +9,91 @@ interface TodoListItemProps {
   onDelete: (id: number) => void;
 }
 
-export const TodoListItem: FC<TodoListItemProps> = ({
-  todo,
-  onUpdate,
-  onDelete,
-}) => {
-  const [title, setTitle] = useState<string>(todo.title);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+export const TodoListItem: FC<TodoListItemProps> = memo(
+  ({ todo, onUpdate, onDelete }) => {
+    const [title, setTitle] = useState<string>(todo.title);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    console.log(inputRef.current);
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isEditing]);
+    useEffect(() => {
+      setTitle(todo.title);
+    }, [todo.title]);
 
-  const handleUpdate = (data: TodoRequest) => {
-    onUpdate(todo.id, data);
-  };
+    useEffect(() => {
+      if (isEditing && inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, [isEditing]);
 
-  const handleSave = () => {
-    if (title !== todo.title) {
-      handleUpdate({ title });
-    }
+    const handleUpdate = (data: TodoRequest) => {
+      onUpdate(todo.id, data);
+    };
 
-    setIsEditing(false);
-  };
+    const handleSave = () => {
+      if (title !== todo.title) {
+        handleUpdate({ title });
+      }
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    setTitle(todo.title);
-  };
+      setIsEditing(false);
+    };
 
-  const handleDelete = () => {
-    onDelete(todo.id);
-  };
+    const handleCancel = () => {
+      setIsEditing(false);
+      setTitle(todo.title);
+    };
 
-  return (
-    <div className="todo-list-item">
-      <input
-        type="checkbox"
-        checked={todo.isDone}
-        onChange={() => handleUpdate({ isDone: !todo.isDone })}
-      />
-      {isEditing ? (
-        <>
-          <input
-            ref={inputRef}
-            className="todo-list-item__title"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter') handleSave();
-              if (e.key === 'Escape') handleCancel();
-            }}
-          />
-          <button onClick={handleCancel}>
-            <Icon variant="cancel" />
-          </button>
-          <button onClick={handleSave}>
-            <Icon variant="save" />
-          </button>
-        </>
-      ) : (
-        <>
-          <span
-            onDoubleClick={() => setIsEditing(true)}
-            className={
-              todo.isDone
-                ? 'todo-list-item__title--done'
-                : 'todo-list-item__title'
-            }
-          >
-            {todo.title}
-          </span>
-          <button onClick={() => setIsEditing(true)}>
-            <Icon variant="edit" />
-          </button>
-          <button onClick={handleDelete}>
-            <Icon variant="delete" />
-          </button>
-        </>
-      )}
-    </div>
-  );
-};
+    const handleDelete = () => {
+      onDelete(todo.id);
+    };
+
+    return (
+      <div className="todo-list-item">
+        <input
+          type="checkbox"
+          checked={todo.isDone}
+          onChange={() => handleUpdate({ isDone: !todo.isDone })}
+        />
+        {isEditing ? (
+          <>
+            <input
+              ref={inputRef}
+              className="todo-list-item__title"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') handleSave();
+                if (e.key === 'Escape') handleCancel();
+              }}
+            />
+            <button onClick={handleCancel}>
+              <Icon variant="cancel" />
+            </button>
+            <button onClick={handleSave}>
+              <Icon variant="save" />
+            </button>
+          </>
+        ) : (
+          <>
+            <span
+              onDoubleClick={() => setIsEditing(true)}
+              className={
+                todo.isDone
+                  ? 'todo-list-item__title--done'
+                  : 'todo-list-item__title'
+              }
+            >
+              {todo.title}
+            </span>
+            <button onClick={() => setIsEditing(true)}>
+              <Icon variant="edit" />
+            </button>
+            <button onClick={handleDelete}>
+              <Icon variant="delete" />
+            </button>
+          </>
+        )}
+      </div>
+    );
+  }
+);
