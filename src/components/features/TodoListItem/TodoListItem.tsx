@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState, type FC } from 'react';
+import { useTodoInput } from '../../../hooks/useValidatedInput';
 import type { Todo, TodoRequest } from '../../../types';
 import { Icon } from '../../ui';
 import './TodoListItem.scss';
@@ -11,13 +12,13 @@ interface TodoListItemProps {
 
 export const TodoListItem: FC<TodoListItemProps> = memo(
   ({ todo, onUpdate, onDelete }) => {
-    const [title, setTitle] = useState<string>(todo.title);
-    const [isEditing, setIsEditing] = useState<boolean>(false);
-
+    const { value, error, setValue, onChange, onValidate, reset } =
+      useTodoInput(todo.title);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
-      setTitle(todo.title);
+      setValue(todo.title);
     }, [todo.title]);
 
     useEffect(() => {
@@ -31,8 +32,10 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
     };
 
     const handleSave = () => {
-      if (title !== todo.title) {
-        handleUpdate({ title });
+      if (!onValidate()) return;
+
+      if (value !== todo.title) {
+        handleUpdate({ title: value });
       }
 
       setIsEditing(false);
@@ -40,11 +43,7 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
 
     const handleCancel = () => {
       setIsEditing(false);
-      setTitle(todo.title);
-    };
-
-    const handleDelete = () => {
-      onDelete(todo.id);
+      reset();
     };
 
     return (
@@ -59,8 +58,8 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
             <input
               ref={inputRef}
               className="todo-list-item__title"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
+              value={value}
+              onChange={onChange}
               onKeyDown={e => {
                 if (e.key === 'Enter') handleSave();
                 if (e.key === 'Escape') handleCancel();
@@ -72,6 +71,7 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
             <button onClick={handleSave}>
               <Icon variant="save" />
             </button>
+            {error && <div className="todo-list-item__error">{error}</div>}
           </>
         ) : (
           <>
@@ -88,7 +88,7 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
             <button onClick={() => setIsEditing(true)}>
               <Icon variant="edit" />
             </button>
-            <button onClick={handleDelete}>
+            <button onClick={() => onDelete(todo.id)}>
               <Icon variant="delete" />
             </button>
           </>

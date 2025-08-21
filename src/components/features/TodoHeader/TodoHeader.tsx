@@ -1,7 +1,7 @@
-import { useState, type ChangeEvent, type FC } from 'react';
+import { type FC } from 'react';
 import type { TodoRequest } from '../../../types';
 
-import { validate } from '../../../utils';
+import { useTodoInput } from '../../../hooks/useValidatedInput';
 import './TodoHeader.scss';
 
 interface TodoHeaderProps {
@@ -9,26 +9,16 @@ interface TodoHeaderProps {
 }
 
 export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
-  const [title, setTitle] = useState<string>('');
-  const [error, setError] = useState<string | null>();
+  const { value, error, onChange, onValidate, setValue } = useTodoInput();
 
-  const handleChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-
-    if (error) setError(null);
-  };
+  const disabledButton = Boolean(error && !value);
 
   const handleAddTodo = () => {
-    const validationError = validate(title);
+    if (!onValidate()) return;
 
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+    onAddTodo({ title: value });
 
-    onAddTodo({ title });
-
-    setTitle('');
+    setValue('');
   };
 
   return (
@@ -37,10 +27,10 @@ export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
         <input
           type="text"
           placeholder="Task to be done"
-          value={title}
-          onChange={handleChangeTitle}
+          value={value}
+          onChange={onChange}
         />
-        <button disabled={!!error} onClick={handleAddTodo}>
+        <button disabled={disabledButton} onClick={handleAddTodo}>
           Add
         </button>
       </div>

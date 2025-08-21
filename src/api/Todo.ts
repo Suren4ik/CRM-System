@@ -1,6 +1,6 @@
 import axios from 'axios';
-import type { Todo, TodoRequest } from './types';
-import type { MetaResponse, TodoInfo, TodoStatus } from './types/Task';
+import type { Todo, TodoRequest } from '../types';
+import type { MetaResponse, TodoInfo, TodoStatus } from '../types/Task';
 
 const API_BASE_URL = 'https://easydev.club/api/v1';
 

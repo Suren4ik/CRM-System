@@ -11,13 +11,17 @@ interface TodoListProps {
 
 export const TodoList: FC<TodoListProps> = ({ todos, onUpdate, onDelete }) => (
   <div className="todo-list">
-    {todos.map(todo => (
-      <TodoListItem
-        key={todo.id}
-        todo={todo}
-        onUpdate={onUpdate}
-        onDelete={onDelete}
-      />
-    ))}
+    {todos.length ? (
+      todos.map(todo => (
+        <TodoListItem
+          key={todo.id}
+          todo={todo}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+        />
+      ))
+    ) : (
+      <span className="todo-list__empty">Список пуст</span>
+    )}
   </div>
 );
