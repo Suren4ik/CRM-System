@@ -1,0 +1,37 @@
+.todo-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+
+  &__row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    & > input {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-bottom: 2px solid #868686;
+      background: transparent;
+      color: #868686;
+    }
+
+    & > button {
+      padding: 9px 25px;
+      background: #1b78fd;
+      color: white;
+      border: none;
+      border-radius: 12px;
+
+      &:hover {
+        transform: scale(1.02);
+        transition: ease;
+      }
+    }
+  }
+
+  &__error {
+    color: red;
+  }
+}

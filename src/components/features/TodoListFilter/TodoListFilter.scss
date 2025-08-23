@@ -1,0 +1,29 @@
+.todo-list-filter {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  button {
+    min-width: 80px;
+    border: none;
+    text-align: center;
+    color: #868686;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  button:hover {
+    color: #76aefe;
+  }
+
+  .filter-active {
+    color: #1b78fd;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+
+    &:hover {
+      color: #1b78fd;
+    }
+  }
+}

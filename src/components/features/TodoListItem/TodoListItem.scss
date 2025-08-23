@@ -1,0 +1,127 @@
+.todo-list-item {
+  display: grid;
+  grid-template-columns: 40px minmax(150px, 400px) 90px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 540px;
+  min-height: 3rem;
+  padding: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  input[type='checkbox'] {
+    appearance: none;
+    margin-left: 8px;
+    width: 23px;
+    height: 23px;
+    border: 1px solid #007bff;
+    border-radius: 50%;
+    background-color: #ffffff;
+    cursor: pointer;
+    position: relative;
+
+    &:checked {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    &:checked::after {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 3px;
+      width: 4px;
+      height: 10px;
+      border: solid #ffffff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    font-size: 16px;
+    color: #333333;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__title--done {
+    text-decoration: line-through;
+    color: #868686;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration-thickness: 2px;
+  }
+
+  &__title-input {
+    max-width: 350px;
+    padding: 4px 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333333;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    }
+  }
+
+  &__error {
+    font-size: 12px;
+    color: #dc143c;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &__actions button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: color 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &[aria-label='cancel']:hover {
+      color: #dc143c;
+    }
+
+    &[aria-label='save']:hover {
+      color: #28a745;
+    }
+
+    &[aria-label='delete']:hover {
+      color: #dc143c;
+    }
+  }
+}
