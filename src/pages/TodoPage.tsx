@@ -1,8 +1,31 @@
+import { useEffect, useState } from 'react';
+import { todoApi } from '../api';
 import { TodoHeader, TodoList, TodoListFilter } from '../components/features';
-import { useTodoPage } from './useTodoPage';
+import type { Todo, TodoInfo, TodoStatus } from '../types';
 
 export const TodoPage = () => {
-  const { changeFilter, getTodos, todos, todoInfo, filter } = useTodoPage();
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoInfo, setTodoInfo] = useState<TodoInfo | null>(null);
+  const [filter, setFilter] = useState<TodoStatus>('all');
+
+  useEffect(() => {
+    getTodos();
+  }, [filter]);
+
+  const changeFilter = (status: TodoStatus) => {
+    setFilter(status);
+  };
+
+  const getTodos = async () => {
+    const response = await todoApi.getTodos(filter);
+
+    setTodos(response.data.data);
+
+    if (response.data.info) {
+      setTodoInfo(response.data.info);
+    }
+  };
+
   return (
     <>
       <TodoHeader updateTodos={getTodos} />
