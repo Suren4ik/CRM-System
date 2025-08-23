@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { validate } from '../utils';
 
-export const useTodoInput = (initialValue: string = '') => {
+export const useValidatedInput = (initialValue: string = '') => {
   const [error, setError] = useState<string>('');
   const [value, setValue] = useState<string>(initialValue);
 

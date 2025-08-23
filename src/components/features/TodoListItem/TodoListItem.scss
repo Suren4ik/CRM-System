@@ -63,6 +63,8 @@
   &__title--done {
     text-decoration: line-through;
     color: #868686;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-decoration-thickness: 2px;
   }
 

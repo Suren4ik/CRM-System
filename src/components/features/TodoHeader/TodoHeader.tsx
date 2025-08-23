@@ -1,22 +1,24 @@
 import { type FC } from 'react';
-import type { TodoRequest } from '../../../types';
 
-import { useTodoInput } from '../../../hooks/useValidatedInput';
+import { todoApi } from '../../../api';
+import { useValidatedInput } from '../../../hooks/useValidatedInput';
 import './TodoHeader.scss';
 
 interface TodoHeaderProps {
-  onAddTodo: (params: TodoRequest) => void;
+  updateTodos: () => void;
 }
 
-export const TodoHeader: FC<TodoHeaderProps> = ({ onAddTodo }) => {
-  const { value, error, onChange, onValidate, setValue } = useTodoInput();
+export const TodoHeader: FC<TodoHeaderProps> = ({ updateTodos }) => {
+  const { value, error, onChange, onValidate, setValue } = useValidatedInput();
 
   const disabledButton = Boolean(error && !value);
 
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     if (!onValidate()) return;
 
-    onAddTodo({ title: value });
+    await todoApi.createTodo({ title: value });
+
+    updateTodos();
 
     setValue('');
   };

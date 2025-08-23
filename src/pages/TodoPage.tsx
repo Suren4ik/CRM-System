@@ -1,20 +1,11 @@
 import { TodoHeader, TodoList, TodoListFilter } from '../components/features';
-
-import { useTodoService } from '../hooks';
+import { useTodoPage } from './useTodoPage';
 
 export const TodoPage = () => {
-  const {
-    addTodo,
-    changeFilter,
-    updateTodo,
-    deleteTodo,
-    todos,
-    todoInfo,
-    filter,
-  } = useTodoService();
+  const { changeFilter, getTodos, todos, todoInfo, filter } = useTodoPage();
   return (
     <>
-      <TodoHeader onAddTodo={addTodo} />
+      <TodoHeader updateTodos={getTodos} />
       {todoInfo && (
         <TodoListFilter
           info={todoInfo}
@@ -22,7 +13,7 @@ export const TodoPage = () => {
           onChange={changeFilter}
         />
       )}
-      <TodoList todos={todos} onUpdate={updateTodo} onDelete={deleteTodo} />
+      <TodoList todos={todos} updateTodos={getTodos} />
     </>
   );
 };

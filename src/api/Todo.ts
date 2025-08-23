@@ -11,6 +11,15 @@ const apiClient = axios.create({
   },
 });
 
+apiClient.interceptors.response.use(
+  response => response,
+  error =>
+    Promise.reject({
+      status: error.response?.status,
+      message: error.response?.data?.message,
+    })
+);
+
 export const todoApi = {
   createTodo: async (request: TodoRequest) =>
     await apiClient.post<Todo>('/todos', request),

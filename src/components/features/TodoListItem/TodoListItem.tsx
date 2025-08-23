@@ -1,19 +1,19 @@
 import { memo, useEffect, useRef, useState, type FC } from 'react';
-import { useTodoInput } from '../../../hooks/useValidatedInput';
+import { todoApi } from '../../../api';
+import { useValidatedInput } from '../../../hooks/useValidatedInput';
 import type { Todo, TodoRequest } from '../../../types';
 import { Icon } from '../../ui';
 import './TodoListItem.scss';
 
 interface TodoListItemProps {
   todo: Todo;
-  onUpdate: (id: number, data: TodoRequest) => void;
-  onDelete: (id: number) => void;
+  updateTodos: () => void;
 }
 
 export const TodoListItem: FC<TodoListItemProps> = memo(
-  ({ todo, onUpdate, onDelete }) => {
+  ({ todo, updateTodos }) => {
     const { value, error, setValue, onChange, onValidate, reset } =
-      useTodoInput(todo.title);
+      useValidatedInput(todo.title);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -27,8 +27,16 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
       }
     }, [isEditing]);
 
-    const handleUpdate = (data: TodoRequest) => {
-      onUpdate(todo.id, data);
+    const handleUpdate = async (data: TodoRequest) => {
+      await todoApi.updateTodo(todo.id, data);
+
+      updateTodos();
+    };
+
+    const handleDelete = async () => {
+      await todoApi.deleteTodo(todo.id);
+
+      updateTodos();
     };
 
     const handleSave = () => {
@@ -98,7 +106,7 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
               <Icon variant="edit" />
             </button>
           )}
-          <button onClick={() => onDelete(todo.id)} aria-label="delete">
+          <button onClick={handleDelete} aria-label="delete">
             <Icon variant="delete" />
           </button>
         </div>
