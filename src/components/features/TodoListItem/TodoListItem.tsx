@@ -53,28 +53,24 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
           checked={todo.isDone}
           onChange={() => handleUpdate({ isDone: !todo.isDone })}
         />
-        {isEditing ? (
-          <>
-            <input
-              ref={inputRef}
-              className="todo-list-item__title"
-              value={value}
-              onChange={onChange}
-              onKeyDown={e => {
-                if (e.key === 'Enter') handleSave();
-                if (e.key === 'Escape') handleCancel();
-              }}
-            />
-            <button onClick={handleCancel}>
-              <Icon variant="cancel" />
-            </button>
-            <button onClick={handleSave}>
-              <Icon variant="save" />
-            </button>
-            {error && <div className="todo-list-item__error">{error}</div>}
-          </>
-        ) : (
-          <>
+        <div className="todo-list-item__content">
+          {isEditing ? (
+            <>
+              <input
+                ref={inputRef}
+                className="todo-list-item__title-input"
+                value={value}
+                onChange={onChange}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') handleSave();
+                  if (e.key === 'Escape') handleCancel();
+                }}
+                aria-label="title"
+                maxLength={64}
+              />
+              {error && <div className="todo-list-item__error">{error}</div>}
+            </>
+          ) : (
             <span
               onDoubleClick={() => setIsEditing(true)}
               className={
@@ -85,14 +81,27 @@ export const TodoListItem: FC<TodoListItemProps> = memo(
             >
               {todo.title}
             </span>
-            <button onClick={() => setIsEditing(true)}>
+          )}
+        </div>
+        <div className="todo-list-item__actions">
+          {isEditing ? (
+            <>
+              <button onClick={handleCancel} aria-label="cancel">
+                <Icon variant="cancel" />
+              </button>
+              <button onClick={handleSave} aria-label="save">
+                <Icon variant="save" />
+              </button>
+            </>
+          ) : (
+            <button onClick={() => setIsEditing(true)} aria-label="edit">
               <Icon variant="edit" />
             </button>
-            <button onClick={() => onDelete(todo.id)}>
-              <Icon variant="delete" />
-            </button>
-          </>
-        )}
+          )}
+          <button onClick={() => onDelete(todo.id)} aria-label="delete">
+            <Icon variant="delete" />
+          </button>
+        </div>
       </div>
     );
   }
